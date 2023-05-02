@@ -2,6 +2,10 @@ const express = require("express");
 
 const server= express();
 
+const cors = require("cors");
+
+server.use(cors())
+
 const data = require("./Movie data/data.json");
 
 const PORT = 3000;
@@ -16,7 +20,7 @@ function Movie(title,poster_path,overview) {
 
 server.get('/',(req,res)=>{
     let move1= new Movie(data.title,data.poster_path,data.overview);
-    res.status(200).send(move1);
+    res.status(200).json(move1);
       
 });
 
@@ -26,14 +30,14 @@ server.get('/favorite',(req,res)=>{
     
 });
 
-server.get('/error',(req,res)=>{
-  let str2={
-    "status": 500,
-"responseText": "Sorry, something went wrong"
-  }
-  res.status(500).send(str2);
-    
-})
+server.use(( req, res) => {
+  res.status(500).json({
+      status: 500,
+      responseText: "Sorry, something went wrong"
+    })
+  })
+
+
 
 server.get('*',(req,res)=>{
   let str1="Page not found"
