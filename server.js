@@ -21,8 +21,8 @@ server.get('/',firstMoveHandler);
 server.get('/favorite',favoriteHandler);
 server.get('/trending',trendMove);
 server.get('/search',searchMove);
-server.get('/tvEpisodes',tvEpisodes);
-server.get('/people',people);
+server.get('/popular',popular);
+server.get('/provider',provider);
 
 
 server.get('*',defaultHandler);
@@ -86,16 +86,16 @@ function searchMove(req,res){
    }
 };
 
-function tvEpisodes(req,res){
-  const url=`https://api.themoviedb.org/3/tv/{tv_id}/season/{season_number}/episode/{episode_number}?api_key=${apiKEY}&language=en-US`
+function popular(req,res){
+  const url=`https://api.themoviedb.org/3/movie/popular?api_key=${apiKEY}&language=en-US&page=1`
    try{
     axios.get(url)
     .then(result=>{
-      let mapEpisodes = result.data.results.map(item=>{
+      let mapMovie = result.data.results.map(item=>{
         let moveInfo = new Movie (item.id,item.title,item.release_date,item.poster_path,item.overview)
         return moveInfo
       })
-      res.send(mapEpisodes)
+      res.send(mapMovie)
     })
     .catch((error)=>{
       res.status(500).send(error)
@@ -106,13 +106,14 @@ function tvEpisodes(req,res){
    }
 };
 
-function people(req,res){
-  const url=`https://api.themoviedb.org/3/person/{person_id}?api_key=${apiKEY}&language=en-US`
+function provider(req,res){
+  const url=`https://api.themoviedb.org/3/watch/providers/regions?api_key=${apiKEY}&language=en-US
+  `
    try{
     axios.get(url)
     .then(result=>{
       let mapPeople = result.data.results.map(item=>{
-        let moveInfo = new Movie (item.id,item.title,item.release_date,item.poster_path,item.overview)
+        let moveInfo = new Movie1 (item.iso_3166_1,item.english_name,item.native_name)
         return moveInfo
       })
       res.send(mapPeople)
@@ -152,6 +153,13 @@ function defaultHandler(req,res){
     this.poster_path = poster_path;
     this.overview = overview;
   };
+
+  function Movie1(iso_3166_1,english_name,native_name) {
+    this.iso_3166_1=iso_3166_1 ;
+    this.english_name=english_name
+    this.native_name=native_name
+  };
+
 
 
 
