@@ -1,34 +1,31 @@
+"use strict";
+
 const express = require("express");
-
 const server= express();
-
 const cors = require("cors");
+const axios = require("axios");
+server.use(cors());
+require('dotenv').config();
 
-server.use(cors())
-
+const apiKEY = process.env.apiKEY
 const data = require("./Movie data/data.json");
 
-const PORT = 3000;
+let PORT = 3000;
 
 
-function Movie(title,poster_path,overview) {
-  this.title = title;
-  this.poster_path = poster_path;
-  this.overview = overview;
-};
 
 
-server.get('/',(req,res)=>{
-    let move1= new Movie(data.title,data.poster_path,data.overview);
-    res.status(200).json(move1);
-      
-});
 
-server.get('/favorite',(req,res)=>{
-  let str="Welcome to Favorite Page"
-  res.status(200).send(str);
-    
-});
+server.get('/',firstMoveHandler);
+
+server.get('/favorite',favoriteHandler);
+server.get('/trending',trendMove);
+server.get('/search',searchMove);
+server.get('/tvEpisodes',tvEpisodes);
+server.get('/people',people);
+
+
+server.get('*',defaultHandler);
 
 server.use(( req, res) => {
   res.status(500).json({
@@ -37,13 +34,125 @@ server.use(( req, res) => {
     })
   })
 
+  function firstMoveHandler(req,res){
+    let move1= new Movie(data.title,data.poster_path,data.overview);
+    res.json(move1);
+      
+};
+
+function favoriteHandler(req,res){
+  let str="Welcome to Favorite Page"
+  res.status(200).send(str);
+    
+};
+
+function trendMove(req,res){
+  const url=`https://api.themoviedb.org/3/trending/all/week?api_key=${apiKEY}&language=en-US`
+   try{
+    axios.get(url)
+    .then(result=>{
+      let mapTrending = result.data.results.map(item=>{
+        let moveInfo = new Movie (item.id,item.title,item.release_date,item.poster_path,item.overview)
+        return moveInfo
+      })
+      res.send(mapTrending)
+    })
+    .catch((error)=>{
+      res.status(500).send(error)
+    })
+   }
+   catch(error){
+    errorHandler(error,req,res)
+   }
+};
+
+function searchMove(req,res){
+  const url=`https://api.themoviedb.org/3/search/movie?api_key=${apiKEY}&language=en-US&query=The&page=2`
+   try{
+    axios.get(url)
+    .then(result=>{
+      let mapSearch = result.data.results.map(item=>{
+        let moveInfo = new Movie (item.id,item.title,item.release_date,item.poster_path,item.overview)
+        return moveInfo
+      })
+      res.send(mapSearch)
+    })
+    .catch((error)=>{
+      res.status(500).send(error)
+    })
+   }
+   catch(error){
+    errorHandler(error,req,res)
+   }
+};
+
+function tvEpisodes(req,res){
+  const url=`https://api.themoviedb.org/3/tv/{tv_id}/season/{season_number}/episode/{episode_number}?api_key=${apiKEY}&language=en-US`
+   try{
+    axios.get(url)
+    .then(result=>{
+      let mapEpisodes = result.data.results.map(item=>{
+        let moveInfo = new Movie (item.id,item.title,item.release_date,item.poster_path,item.overview)
+        return moveInfo
+      })
+      res.send(mapEpisodes)
+    })
+    .catch((error)=>{
+      res.status(500).send(error)
+    })
+   }
+   catch(error){
+    errorHandler(error,req,res)
+   }
+};
+
+function people(req,res){
+  const url=`https://api.themoviedb.org/3/person/{person_id}?api_key=${apiKEY}&language=en-US`
+   try{
+    axios.get(url)
+    .then(result=>{
+      let mapPeople = result.data.results.map(item=>{
+        let moveInfo = new Movie (item.id,item.title,item.release_date,item.poster_path,item.overview)
+        return moveInfo
+      })
+      res.send(mapPeople)
+    })
+    .catch((error)=>{
+      res.status(500).send(error)
+    })
+   }
+   catch(error){
+    errorHandler(error,req,res)
+   }
+};
 
 
-server.get('*',(req,res)=>{
+
+function errorHandler(error,req,res){
+  const err = {
+      status: 500,
+      message: error
+  }
+  res.status(500).send(err);
+};
+
+function defaultHandler(req,res){
   let str1="Page not found"
   res.status(404).send(str1);
     
-})
+};
+
+
+
+
+  function Movie(id,title,release_date,poster_path,overview) {
+    this.id=id;
+    this.title = title;
+    this.release_date=release_date;
+    this.poster_path = poster_path;
+    this.overview = overview;
+  };
+
 
 
 

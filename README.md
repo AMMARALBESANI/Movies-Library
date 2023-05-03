@@ -18,6 +18,7 @@ the clone repo and then create your server by typing in terminal tough server.js
 then type npm init-y to initialize your server using node js
 then install express by typing npm i express 
 
+
 ## Project Features
 
 I ues '/' path to the main page that have a constructor to manage the structure of the respond
@@ -28,3 +29,9 @@ any unknown path will have 404 status with "page not found " respond
 
 server error will respond "status": 500,
 "responseText": "Sorry, something went wrong"
+
+we use cors in order to handel many request in the same time
+
+we use try catch method to handel request error
+we ues .then catch to handel code error
+we use api 3rd party to take move from it
