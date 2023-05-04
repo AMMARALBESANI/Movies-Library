@@ -67,7 +67,7 @@ function trendMove(req,res){
 };
 
 function searchMove(req,res){
-  const url=`https://api.themoviedb.org/3/search/movie?api_key=${apiKEY}&language=en-US&query=The&page=2`
+  const url=`https://api.themoviedb.org/3/search/movie?api_key=${apiKEY}&language=en-US&query=no&page=3&year=2002`
    try{
     axios.get(url)
     .then(result=>{
