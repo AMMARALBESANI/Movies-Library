@@ -35,3 +35,4 @@ we use cors in order to handel many request in the same time
 we use try catch method to handel request error
 we ues .then catch to handel code error
 we use api 3rd party to take move from it
+now we update our app and linked it to database we created using postgrs
