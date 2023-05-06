@@ -6,18 +6,21 @@ const cors = require("cors");
 const axios = require("axios");
 server.use(cors());
 require('dotenv').config();
+const pg = require("pg");
+server.use(express.json());
 
 const apiKEY = process.env.apiKEY
 const data = require("./Movie data/data.json");
 
 let PORT = 3000;
+const DB = process.env.database_url
 
-
-
+const moveInst =new pg.Client(DB)
 
 
 server.get('/',firstMoveHandler);
-
+server.get('/laststand',getMove);
+server.post('/laststand',addMove)
 server.get('/favorite',favoriteHandler);
 server.get('/trending',trendMove);
 server.get('/search',searchMove);
@@ -106,6 +109,21 @@ function popular(req,res){
    }
 };
 
+
+function addMove(req,res){
+  const moveBody =req.body;
+  const sql =`INSERT INTO move1 ( title , released , summary)
+   VALUES ($1 , $2 , $3);`
+  const values =[moveBody.title , moveBody.released , moveBody.summary];
+  
+  moveInst.query(sql,values)
+  .then(data=>{
+    res.send("your move added successfully");
+  }).catch((error)=>{
+    errorHandler(error,req,res)
+  })
+};
+
 function provider(req,res){
   const url=`https://api.themoviedb.org/3/watch/providers/regions?api_key=${apiKEY}&language=en-US
   `
@@ -125,6 +143,18 @@ function provider(req,res){
    catch(error){
     errorHandler(error,req,res)
    }
+};
+
+function getMove(req,res){
+  const LastSatndInfo ='SELECT * FROM move';
+  moveInst.query(LastSatndInfo)
+  .then(data,()=>{
+    res.send(data.row)
+  })
+  .catch((error)=>{
+    errorHandler(error,req,res)
+  })
+
 };
 
 
@@ -162,7 +192,10 @@ function defaultHandler(req,res){
 
 
 
+  moveInst.connect()
+.then(()=>{
+  server.listen(PORT,()=>{});
+});
 
 
-server.listen(PORT,()=>{});
 
