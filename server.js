@@ -19,8 +19,8 @@ const moveInst =new pg.Client(DB)
 
 
 server.get('/',firstMoveHandler);
-server.get('/laststand',getMove);
-server.post('/laststand',addMove)
+server.get('/getmove',getMove);
+server.post('/getmove',addMove);
 server.get('/favorite',favoriteHandler);
 server.get('/trending',trendMove);
 server.get('/search',searchMove);
