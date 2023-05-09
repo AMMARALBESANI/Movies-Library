@@ -148,16 +148,15 @@ function provider(req, res) {
   }
 };
 
-function getMove(req, res) {
-  const sql = 'SELECT * FROM move1';
+function getMove(req,res){
+  const sql ='SELECT * FROM move1';
   moveInst.query(sql)
-    .then(data => {
-      res.send(data.rows)
-      console.log(data.rows)
-    })
-    .catch((error) => {
-      errorHandler(error, req, res)
-    })
+  .then(data=>{
+    res.send(data.rows)
+  })
+  .catch((error)=>{
+    errorHandler(error,req,res)
+  })
 
 };
 
