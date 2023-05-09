@@ -38,3 +38,4 @@ we use api 3rd party to take move from it
 now we update our app and linked it to database we created using postgrs
 we use path params to update and delet spicific row from table in database 
 we ues query to read from database about spicific row 
+![CURD and resfullAPI](./assist/CURD.png)
