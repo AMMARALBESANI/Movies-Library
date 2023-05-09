@@ -19,11 +19,14 @@ const moveInst = new pg.Client(DB)
 
 
 server.get('/', firstMoveHandler);
+
 server.get('/getmove', getMove);
-server.get('/getMoveByID', getMoveByID);
 server.post('/getmove', addMove);
+
+server.get('/getMoveByID', getMoveByID);
 server.delete('/getmove/:id', deleteMove);
 server.put('/getmove/:id', updateMove);
+
 server.get('/favorite', favoriteHandler);
 server.get('/trending', trendMove);
 server.get('/search', searchMove);
