@@ -191,7 +191,7 @@ function getMoveByID(req, res) {
   const { id } = req.query;
   const sql = `SELECT * FROM move1 WHERE id =${id}`
   moveInst.query(sql)
-    .then(data, () => {
+    .then(data=> {
       res.send(data)
     })
     .catch((error) => {
