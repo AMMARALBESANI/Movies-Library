@@ -146,10 +146,10 @@ function provider(req,res){
 };
 
 function getMove(req,res){
-  const LastSatndInfo ='SELECT * FROM move';
-  moveInst.query(LastSatndInfo)
-  .then(data,()=>{
-    res.send(data.row)
+  const sql ='SELECT * FROM move1';
+  moveInst.query(sql)
+  .then(data=>{
+    res.send(data.rows)
   })
   .catch((error)=>{
     errorHandler(error,req,res)
