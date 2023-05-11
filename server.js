@@ -23,7 +23,7 @@ server.get('/', firstMoveHandler);
 server.get('/getmove', getMove);
 server.post('/getmove', addMove);
 
-server.get('/getMoveByID', getMoveByID);
+server.get('/getMoveByID/:id', getMoveByID);
 server.delete('/getmove/:id', deleteMove);
 server.put('/getmove/:id', updateMove);
 
@@ -166,9 +166,11 @@ function getMove(req,res){
 function deleteMove(req, res) {
   const { id } = req.params;
   const sql = `DELETE FROM move1 WHERE id = ${id};`
-  moveInst.query(sql).then(data => {
+  moveInst.query(sql)
+  .then(data => {
     res.status(200).send(data)
-  }).catch(error => {
+  })
+  .catch(error => {
     errorHandler(error, req, res)
   })
 }
@@ -191,7 +193,7 @@ function updateMove(req, res) {
 }
 
 function getMoveByID(req, res) {
-  const { id } = req.query;
+  const { id } = req.params;
   const sql = `SELECT * FROM move1 WHERE id =${id}`
   moveInst.query(sql)
     .then(data => {
