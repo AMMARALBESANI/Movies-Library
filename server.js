@@ -9,13 +9,13 @@ require('dotenv').config();
 const pg = require("pg");
 server.use(express.json());
 
-const apiKEY = process.env.apiKEY
+const apiKEY = process.env.apiKEY;
 const data = require("./Movie data/data.json");
 
-let PORT = 3000;
-const DB = process.env.database_url
+let PORT = process.env.PORT;
+const DB = process.env.database_url;
 
-const moveInst = new pg.Client(DB)
+const moveInst = new pg.Client(DB);
 
 
 server.get('/', firstMoveHandler);
@@ -41,7 +41,7 @@ server.use((req, res) => {
     status: 500,
     responseText: "Sorry, something went wrong"
   })
-})
+});
 
 function firstMoveHandler(req, res) {
   let move1 = new Movie(data.title, data.poster_path, data.overview);
@@ -151,15 +151,15 @@ function provider(req, res) {
   }
 };
 
-function getMove(req,res){
-  const sql ='SELECT * FROM move1';
+function getMove(req, res) {
+  const sql = 'SELECT * FROM move1';
   moveInst.query(sql)
-  .then(data=>{
-    res.send(data.rows)
-  })
-  .catch((error)=>{
-    errorHandler(error,req,res)
-  })
+    .then(data => {
+      res.send(data.rows)
+    })
+    .catch((error) => {
+      errorHandler(error, req, res)
+    })
 
 };
 
@@ -167,12 +167,12 @@ function deleteMove(req, res) {
   const { id } = req.params;
   const sql = `DELETE FROM move1 WHERE id = ${id};`
   moveInst.query(sql)
-  .then(data => {
-    res.status(200).send(data)
-  })
-  .catch(error => {
-    errorHandler(error, req, res)
-  })
+    .then(data => {
+      res.status(200).send(data)
+    })
+    .catch(error => {
+      errorHandler(error, req, res)
+    })
 }
 
 function updateMove(req, res) {
