@@ -12,7 +12,7 @@ server.use(express.json());
 const apiKEY = process.env.apiKEY;
 const data = require("./Movie data/data.json");
 
-let PORT = process.env.PORT;
+let PORT = process.env.PORT || 3000;
 const DB = process.env.database_url;
 
 const moveInst = new pg.Client(DB);
