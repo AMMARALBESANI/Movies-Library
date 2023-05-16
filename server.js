@@ -118,9 +118,9 @@ function popular(req, res) {
 
 function addMove(req, res) {
   const moveBody = req.body;
-  const sql = `INSERT INTO move1 ( title ,  poster_path , overveiw)
-   VALUES ($1 , $2 , $3);`
-  const values = [moveBody.title, moveBody. poster_path, moveBody.overveiw];
+  const sql = `INSERT INTO move1 ( title ,  poster_path ,  overview , release_date , comment)
+   VALUES ($1 , $2 , $3 ,$4 ,$5);`
+  const values = [moveBody.title, moveBody. poster_path, moveBody. overview,moveBody.release_date,moveBody.comment];
 
   moveInst.query(sql, values)
     .then(data => {
