@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS move1(
  id SERIAL PRIMARY KEY,
  title varchar(250),
  poster_path varchar(250),
- overveiw varchar(250),
- release_date Date
+ overview varchar(500),
+ release_date Date,
+ comment varchar(250)
 );
