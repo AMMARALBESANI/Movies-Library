@@ -120,7 +120,7 @@ function addMove(req, res) {
   const moveBody = req.body;
   const sql = `INSERT INTO move1 ( title ,  poster_path ,  overview , release_date , comment)
    VALUES ($1 , $2 , $3 ,$4 ,$5);`
-  const values = [moveBody.title, moveBody. poster_path, moveBody. overview,moveBody.release_date,moveBody.comment];
+  const values = [moveBody.title, moveBody.poster_path, moveBody.overview, moveBody.release_date, moveBody.comment];
 
   moveInst.query(sql, values)
     .then(data => {
@@ -168,8 +168,11 @@ function deleteMove(req, res) {
   const sql = `DELETE FROM move1 WHERE id = ${id};`
   moveInst.query(sql)
     .then(data => {
-      res.status(200).send(data)
+     res.send("ok")
     })
+
+   
+    
     .catch(error => {
       errorHandler(error, req, res)
     })
@@ -178,14 +181,21 @@ function deleteMove(req, res) {
 function updateMove(req, res) {
   const { id } = req.params;
 
-  const sql = `UPDATE move1 SET title = $1 , released = $2 , summary = $3 WHERE id = ${id};`;
+  const updatedMove = req.body;
 
-  const { title, released, summary } = req.body;
+  const sql = `UPDATE move1 SET title = $1 , poster_path = $2 , overview = $3 ,release_date=$4 ,comment=$5 WHERE id = ${id};`;
 
-  const values = [title, released, summary];
+  const { title, poster_path, overview, release_date, comment } = req.body;
 
-  moveInst.query(sql, values).then(data => {
-    res.status(201).send(data)
+  const values = [title, poster_path, overview, release_date, comment];
+
+  moveInst.query(sql, values)
+  .then(data => {
+    const sql = 'SELECT * FROM move1';
+    moveInst.query(sql)
+    .then(alldata =>{
+      res.send(alldata.rows)
+    })
   }).catch(error => {
     errorHandler(error, req, res)
   })
